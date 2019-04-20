@@ -11,7 +11,7 @@ class Welcome extends CI_Controller {
 
     public function index() {
 
-        $response = $this->User_model->organisation_info();
+        $response = $this->Login_user->organisation_info();
         //print_r($response);
         //die;
         if ($response == 0) { //if organisation is not registered
@@ -42,14 +42,14 @@ class Welcome extends CI_Controller {
                         $username = $this->input->post('username');
                         $password = $this->input->post('password');
 
-                        $this->load->model('User_model');
-                        $response = $this->User_model->check_login($username, $password);
+                        $this->load->model('Login_user');
+                        $response = $this->Login_user->check_login($username, $password);
 
-                        switch ($response->login_type) {
+                        switch ($response['login_type']) {
                             case 'ADMIN':
-                                $session['username'] = $response->username;
-                                $session['login_type'] = $response->login_type;
-
+                                $session['login_detail'] = $response;
+                                
+                                $this->customlib->setUserLog($response['id'], $response['username'], $response['login_type']);
                                 $this->session->set_userdata($session);
                                 redirect(base_url('Admin/Dashboard'));
                                 break;
@@ -118,7 +118,7 @@ class Welcome extends CI_Controller {
               print_r($data);
               echo "</pre>"; */
 
-            $this->User_model->organisation_registration($data);
+            $this->Login_user->organisation_registration($data);
 
             //send email start
             $subject = 'CNVG Fund Management - Email Verification';
@@ -165,7 +165,7 @@ class Welcome extends CI_Controller {
 
     public function verify_email($email) {
         $email = base64_decode($email);
-        $response = $this->User_model->detailBy_EmailId($email);
+        $response = $this->Login_user->detailBy_EmailId($email);
 //        print_r($response);
 //        die;
         if ($response == 0 || $response['email_verify'] == 1) {
@@ -175,8 +175,8 @@ class Welcome extends CI_Controller {
         } else {
             $id = $response['id'];
             $password = strtolower(random_string('alpha', '6'));
-            $this->User_model->verify_organisation($id, md5($password));
-            $response = $this->User_model->detailBy_EmailId($email);
+            $this->Login_user->verify_organisation($id, md5($password));
+            $response = $this->Login_user->detailBy_EmailId($email);
             //send email start
             $head_email = $response['head_email'];
             $username = $response['username'];

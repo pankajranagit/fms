@@ -26,29 +26,29 @@
                         Login Panel
                     </div>
                     <div class="card-body">
-                        <?= form_open(base_url('Welcome/index')) ?>
-                        <div class="form-group">
-                            <label>Username</label>
-                            <input name="username" type="text" class="form-control" placeholder="Enter Username">
-                            <lable class="small"><?php echo form_error('username'); ?></lable>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="Enter Password">
-                            <lable class="small"><?php echo form_error('password'); ?></lable>
-                        </div>
-                        <div class="form-group">
-                            <label class="small">Type the character you see in this image :</label>
-                            <p id="captImg"><?php echo $captchaImg; ?></p>
-                            <label class="small">Can't read the image? click <a href="javascript:void(0);" class="refreshCaptcha">here</a> to refresh.</label>
-                            <input type="hidden" id="base_url_captcha" value="<?= base_url('Welcome/refresh') ?>">
-                            <input required="" type="text" class="form-control" name="captcha" placeholder="Type Characters">
-                            <?= ($captcha_error ? "<lable class=\"small\"><p>You have mistyped the captcha.</p></lable>" : "") ?>
-                        </div>
-                        <?php
+                        <form method="post" action="<?= base_url('Welcome/index') ?>">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input name="username" type="text" class="form-control" placeholder="Enter Username">
+                                <lable class="small"><?php echo form_error('username'); ?></lable>
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" name="password" class="form-control" placeholder="Enter Password">
+                                <lable class="small"><?php echo form_error('password'); ?></lable>
+                            </div>
+                            <div class="form-group">
+                                <label class="small">Type the character you see in this image :</label>
+                                <p id="captImg"><?php echo $captchaImg; ?></p>
+                                <label class="small">Can't read the image? click <a href="javascript:void(0);" class="refreshCaptcha">here</a> to refresh.</label>
+                                <input type="hidden" id="base_url_captcha" value="<?= base_url('Welcome/refresh') ?>">
+                                <input required="" autocomplete="off" type="text" class="form-control" name="captcha" placeholder="Type Characters">
+                                <?= ($captcha_error ? "<lable class=\"small\"><p>You have mistyped the captcha.</p></lable>" : "") ?>
+                            </div>
+                            <?php
                             echo $this->session->flashdata('msg');
-                        ?>
-                        <button class="btn btn-primary" name="submit" type="submit">Login</button>
+                            ?>
+                            <button class="btn btn-primary" name="submit" type="submit">Login</button>
                         </form>
                     </div>
                 </div>
